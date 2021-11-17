@@ -1,0 +1,113 @@
+        -:    0:Source:src/inventory.c
+        -:    0:Graph:tuxquest.gcno
+        -:    0:Data:tuxquest.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include"inventory.h"
+        -:    2:#include<stdlib.h>
+        -:    3:#include<string.h>
+        -:    4:
+    #####:    5:void addItem (int which, InvNode **inventory){
+    #####:    6:  struct invNode* tempNode = (struct invNode*) malloc(sizeof(struct invNode));
+        -:    7:  InvNode loot;
+    #####:    8:  if ((*inventory) == NULL) {
+    #####:    9:    (*inventory)->next = NULL;
+    #####:   10:    if (which == 1) {
+    #####:   11:      loot = goblin_loot;
+    #####:   12:      (*inventory)->name = loot.name;
+    #####:   13:      (*inventory)->description = loot.description;
+    #####:   14:      (*inventory)->value = loot.value;
+        -:   15:    }
+    #####:   16:    else if (which == 2){
+    #####:   17:      loot = orc_loot;
+    #####:   18:      (*inventory)->name = loot.name;
+    #####:   19:      (*inventory)->description = loot.description;
+    #####:   20:      (*inventory)->value = loot.value;
+        -:   21:    }
+        -:   22:  }
+        -:   23:  else{
+    #####:   24:    if (which == 1){
+    #####:   25:      loot = goblin_loot;
+    #####:   26:      tempNode->name = loot.name;
+    #####:   27:      tempNode->description = loot.description;
+    #####:   28:      tempNode->value = loot.value;
+        -:   29:    }
+    #####:   30:    else if (which == 2) {
+    #####:   31:      loot = goblin_loot;
+    #####:   32:      tempNode->name = loot.name;
+    #####:   33:      tempNode->description = loot.description;
+    #####:   34:      tempNode->value = loot.value;
+        -:   35:    }
+    #####:   36:    tempNode->next = (*inventory);
+    #####:   37:    (*inventory) = tempNode;
+        -:   38:  }
+    #####:   39:}
+        -:   40:
+    #####:   41:int sellItem(int number, InvNode **inventory){
+    #####:   42:  if ((*inventory) == NULL) {
+    #####:   43:    return 0;
+        -:   44:  }
+        -:   45:
+    #####:   46:  InvNode lootgoblin = goblin_loot;
+    #####:   47:  InvNode lootorc = orc_loot;
+    #####:   48:  struct invNode* tempNode = (*inventory);
+        -:   49:  
+    #####:   50:  if (number == 0){
+    #####:   51:    if ((*inventory)->value == lootgoblin.value){
+    #####:   52:      (*inventory) = tempNode->next;
+    #####:   53:      free(tempNode);
+    #####:   54:      return lootgoblin.value;
+        -:   55:    }
+    #####:   56:    else if ((*inventory)->value == lootorc.value){
+    #####:   57:      (*inventory) = tempNode->next;
+    #####:   58:      free(tempNode);
+    #####:   59:      return lootorc.value;
+        -:   60:    } 
+        -:   61:  }
+    #####:   62:  int i = 0;
+    #####:   63:  while (i != number-1 && tempNode != NULL){
+    #####:   64:    tempNode = tempNode->next;
+        -:   65:  }
+    #####:   66:  struct invNode* nextNode = tempNode->next->next;
+    #####:   67:  if(tempNode->next->value == lootgoblin.value){
+    #####:   68:    free(tempNode->next);
+    #####:   69:    tempNode->next = nextNode;
+    #####:   70:    return lootgoblin.value;
+        -:   71:  }
+    #####:   72:  else if (tempNode->next->value == lootorc.value){
+    #####:   73:    free(tempNode->next);
+    #####:   74:    tempNode->next = nextNode;
+    #####:   75:    return lootorc.value;
+        -:   76:  }
+    #####:   77:  return 0;
+        -:   78:  
+        -:   79:}
+        -:   80:
+        -:   81:
+        -:   82:/**
+        -:   83: *
+        -:   84: *@param *inventory A single pointer to the player's inventory is given as a means to check its current items
+        -:   85: *@param number A number is given as a parameter to determine the number corresponding to the number of items
+        -:   86: *@return the function takes the form of a void to only print the inventory of the player
+        -:   87: *
+        -:   88: */
+        -:   89:
+        2:   90:void displayInventory(InvNode *inventory, int number){
+        2:   91:	if (inventory == NULL) {
+        2:   92:		printf("*** Inventory Empty ***\n");
+        2:   93:		return;
+        -:   94:	}
+    #####:   95:	printf("╔══╤══════════════════════╤════════╗\n");
+    #####:   96:	printf("║%2.2d|%22.22s│%2d gold ║\n", number, inventory->name, inventory->value);
+    #####:   97:	printf("╟──┴──────────────────────┴────────╢\n");
+    #####:   98:	int length = strlen(inventory->description);
+    #####:   99:	int i = 0;
+    #####:  100:	while (i < length) {
+    #####:  101:		printf("║%34.34s║\n", (inventory->description + i));
+    #####:  102:		i += 34;
+        -:  103:	}
+    #####:  104:	printf("╚══════════════════════════════════╝\n");
+    #####:  105:	if (inventory->next != NULL) {
+    #####:  106:		displayInventory(inventory->next, number + 1);
+        -:  107:	}	
+        -:  108:}

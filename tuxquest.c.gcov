@@ -1,0 +1,73 @@
+        -:    0:Source:src/tuxquest.c
+        -:    0:Graph:tuxquest.gcno
+        -:    0:Data:tuxquest.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include<stdio.h>
+        -:    2:#include<stdbool.h>
+        -:    3:#include<string.h>
+        -:    4:#include"stats.c"
+        -:    5:#include"utils.c"
+        -:    6:#include"locations.c"
+        -:    7:
+        -:    8:
+        -:    9:enum Option{travel,status,quit};
+        -:   10:
+        -:   11:typedef struct creature Creature;
+        -:   12:
+        9:   13:enum Option readOption (char resp[50]) {
+        9:   14:	if (strncmp(resp, "travel", 7) == 0) {
+        7:   15:		return travel;
+        2:   16:	} else if (strncmp(resp, "status", 7) == 0) {
+        2:   17:		return status;
+    #####:   18:	} else if (strncmp(resp, "quit", 5) == 0) {
+    #####:   19:		return quit;
+        -:   20:	} else {
+    #####:   21:		return -1;
+        -:   22:	}
+        -:   23:}
+        -:   24:
+        1:   25:int main() {
+        1:   26:	printf(">>> Welcome to TuxQuest <<<\n");
+        1:   27:	bool gameWon = false;
+        -:   28:	char response[50];
+        -:   29:	int resp;
+        1:   30:	Player tux = player_init;
+        9:   31:	while (!gameWon) {
+        -:   32:		// get Scenario
+        9:   33:		printf ("Your options are:\n");
+        9:   34:		printf ("- travel\n");
+        9:   35:		printf ("- status\n");
+        9:   36:		printf ("- quit\n");
+        9:   37:		printf (">> ");
+        9:   38:		scanf("%50s", response);
+        9:   39:		printf("\n");
+        9:   40:		resp = readOption(response);
+        9:   41:		switch (resp) {
+        7:   42:			case travel :
+        7:   43:				if (travelDispatch(&tux)) {
+    #####:   44:					printf("|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|\n");
+    #####:   45:					printf("Congratulations!  Tux has defeated the dragon!\n");
+    #####:   46:					printf("|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|\n");
+    #####:   47:					printf("\"The treasure is mine!\" Cries Tux gleefully.\n");	
+    #####:   48:					displayImage("images/winnar.ascii");	
+    #####:   49:					printf("But all the herring had gone bad because the\n");
+    #####:   50:					printf("chest wasn't refrigerated!\n");
+    #####:   51:					displayImage("images/herring.ascii");
+    #####:   52:					printf(">>> Thank you for playing TuxQuest <<<\n");
+    #####:   53:					exit(0);
+        -:   54:				}
+        6:   55:				break;
+        2:   56:			case status :
+        2:   57:				displayStats(&tux);
+        2:   58:				break;
+    #####:   59:			case quit :
+    #####:   60:				return 0;
+    #####:   61:			default : 
+    #####:   62:				printf("Command Not Recognized!\n"); 
+    #####:   63:				break; 
+        -:   64:		}
+        -:   65:		
+        -:   66:		// execute command	
+        -:   67:	}
+        -:   68:}

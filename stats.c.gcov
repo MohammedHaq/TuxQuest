@@ -1,0 +1,24 @@
+        -:    0:Source:src/stats.c
+        -:    0:Graph:tuxquest.gcno
+        -:    0:Data:tuxquest.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include<stdio.h>
+        -:    2:#include"utils.h"
+        -:    3:#include"stats.h"
+        -:    4:
+        2:    5:void displayStats(Player *tux) {
+        2:    6:	printf("\n");
+        2:    7:	displayImage("images/tux.ascii");
+        2:    8:	printf(">><<>><<>><<>><<\n");
+        2:    9:	printf("LVL : %d\n", tux->level);
+        2:   10:	printf("HP : %d / %d\n", tux->stats.HP, tux->stats.MAX_HP);
+        2:   11:	printf("XP : %d / 100\n", tux->stats.XP);
+        2:   12:	printf("ATK : %d\n", tux->stats.ATK);
+        2:   13:	printf("DEF : %d\n", tux->stats.DEF);
+        2:   14:	printf(">><<>><<>><<>><<\n");
+        2:   15:	printf("Gold : %d\n", tux->gold);
+        2:   16:	printf("Inventory : \n");
+        -:   17://	printf("%p", tux->inventory);
+        2:   18:	displayInventory(tux->inventory, 0);
+        2:   19:}
