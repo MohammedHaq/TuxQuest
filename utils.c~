@@ -1,0 +1,14 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+void displayImage(const char *filename) {
+  char buf[100];
+  FILE * fh = fopen(filename,"r");
+  while (fgets(buf,sizeof(buf),fh)) {
+    printf("%s",buf);
+  }
+  
+  fclose(fh);
+}
+
+
